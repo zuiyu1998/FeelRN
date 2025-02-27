@@ -13,6 +13,7 @@ module.exports = {
           '@theme': './src/theme',
           '@utils': './src/utils',
           '@store': './src/store',
+          '@tools': './src/tools',
         },
       },
     ],
