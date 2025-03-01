@@ -2,17 +2,18 @@ import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
 import {USER_KEY} from './consts';
 import {getSingleStorage} from '@tools/storage';
+import {Store} from './types';
 
-interface BearState {
-  bears: number;
-  increase: (by: number) => void;
+interface UserState {
+  token: string | undefined;
+  setToken: (newToken: string | undefined) => void;
 }
 
-export const useBearStore = create<BearState>()(
+export const useUserStore = create<UserState>()(
   persist(
     set => ({
-      bears: 0,
-      increase: by => set(state => ({bears: state.bears + by})),
+      token: undefined,
+      setToken: newToken => set(() => ({token: newToken})),
     }),
     {
       name: USER_KEY,
@@ -20,3 +21,13 @@ export const useBearStore = create<BearState>()(
     },
   ),
 );
+
+export const userStore: Store = {
+  async ensureInitialization() {
+    await useUserStore.persist.rehydrate();
+  },
+};
+
+export function getToken() {
+  return useUserStore.getState().token;
+}

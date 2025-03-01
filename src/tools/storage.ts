@@ -25,7 +25,7 @@ class MMKVStorage implements IStorage {
     let v = await this.getItem(name);
 
     if (v) {
-      await this.instance.delete(name);
+      this.instance.delete(name);
       return v;
     } else {
       return null;
