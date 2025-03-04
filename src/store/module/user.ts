@@ -1,8 +1,8 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
-import {USER_KEY} from './consts';
+import {USER_KEY} from '../consts';
 import {getSingleStorage} from '@tools/storage';
-import {Store} from './types';
+import {Store} from '../types';
 
 interface UserState {
   token: string | undefined;
