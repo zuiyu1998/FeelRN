@@ -1,7 +1,7 @@
 import {getSingleStorage} from '@tools/storage';
 import {StateStorage} from 'zustand/middleware';
 
-describe('Example test', () => {
+describe('storage test', () => {
   let storage: StateStorage;
 
   beforeAll(() => {

@@ -9,7 +9,8 @@
       "@store/*": ["src/store/*"],
       "@theme/*": ["src/theme/*"],
       "@utils/*": ["src/utils/*"],
-      "@tools/*": ["src/tools/*"]
+      "@tools/*": ["src/tools/*"],
+      "@views/*": ["src/views/*"]
     }
   }
 }
