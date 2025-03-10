@@ -3,10 +3,27 @@ import {
   ReaderPageManager,
   ReaderRenderConfig,
   ReaderConfig,
+  ReaderSource,
 } from '@components/Reader/types';
 
 describe('reader page manager test', () => {
-  it('reader page manager start', () => {
+  it('reader page manager start', async () => {
+    let source: ReaderSource = {
+      async getPage(pageId) {
+        if (pageId < 2) {
+          return [
+            '1234-1234-1234-1234-1234-1234-',
+            '1234-1234-1234-1234-1234-1234-',
+            '1234-1234-1234-1234-1234-1234-',
+            '1234-1234-1234-1234-1234-1234-',
+            '1234-1234-1234-1234-1234-1234-',
+          ];
+        } else {
+          return undefined;
+        }
+      },
+    };
+
     let renderConfig: ReaderRenderConfig = {
       height: 70,
       width: 375,
@@ -15,30 +32,36 @@ describe('reader page manager test', () => {
     };
 
     let config: ReaderConfig = {
-      buffer: 4,
+      buffer: 6,
     };
 
-    let readerPageManager = new ReaderPageManager(config);
+    let readerPageManager = new ReaderPageManager(source, config);
 
-    readerPageManager.addPage(0, [
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-    ]);
+    readerPageManager.addLoadingPage(0);
+    let data = await readerPageManager.fetchPage(0);
+    if (data) {
+      readerPageManager.addPage(0, data);
+    } else {
+      readerPageManager.addErrorPage(0);
+    }
 
-    readerPageManager.addPage(1, [
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-      '1234-1234-1234-1234-1234-1234-',
-    ]);
+    data = await readerPageManager.fetchPage(1);
+    if (data) {
+      readerPageManager.addPage(1, data);
+    } else {
+      readerPageManager.addErrorPage(1);
+    }
+
+    data = await readerPageManager.fetchPage(2);
+    if (data) {
+      readerPageManager.addPage(2, data);
+    } else {
+      readerPageManager.addErrorPage(2);
+    }
 
     let pages = readerPageManager.render(0, renderConfig, false);
 
-    expect(pages.length).toEqual(6);
+    expect(pages.length).toEqual(7);
   });
 });
 
@@ -51,7 +74,9 @@ describe('reader page test', () => {
       fontSize: 16,
     };
 
-    let reader = new ReaderPage(1, ['1234-1234-1234-1234-1234-1234-']);
+    let reader = new ReaderPage(1);
+    reader.setData(['1234-1234-1234-1234-1234-1234-']);
+
     let pages = reader.render(config);
 
     expect(pages.length).toEqual(1);
@@ -70,13 +95,16 @@ describe('reader page test', () => {
       fontSize: 16,
     };
 
-    let reader = new ReaderPage(1, [
+    let reader = new ReaderPage(1);
+
+    reader.setData([
       '1234-1234-1234-1234-1234-1234-',
       '1234-1234-1234-1234-1234-1234-',
       '1234-1234-1234-1234-1234-1234-',
       '1234-1234-1234-1234-1234-1234-',
       '1234-1234-1234-1234-1234-1234-',
     ]);
+
     let pages = reader.render(config);
 
     expect(pages.length).toEqual(3);

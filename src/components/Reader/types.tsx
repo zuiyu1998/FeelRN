@@ -1,5 +1,9 @@
 import {range} from 'lodash-es';
 
+export interface ReaderSource {
+  getPage(pageId: number): Promise<string[] | undefined>;
+}
+
 export type ReaderRenderConfig = {
   height: number;
   width: number;
@@ -24,6 +28,9 @@ export type PageSlice = {
 export type Page = {
   data: string[];
   key: string;
+  loading: boolean;
+  error: boolean;
+  empty: boolean;
 };
 
 export type ReaderConfig = {
@@ -34,13 +41,79 @@ export type ReaderConfig = {
 export class ReaderPageManager {
   pages: Map<number, ReaderPage> = new Map();
   config: ReaderConfig;
+  source: ReaderSource;
 
-  constructor(config: ReaderConfig) {
+  pageIndexToPageId: Map<number, number> = new Map();
+
+  constructor(source: ReaderSource, config: ReaderConfig) {
+    this.source = source;
     this.config = config;
   }
 
-  addPage(pageId: number, data: string[]) {
-    let renderPage = new ReaderPage(pageId, data);
+  async initialization(currentPage: number) {
+    let pageIds = this.getCurrentPageIndexs(currentPage);
+
+    let pageDatas = await Promise.all(
+      pageIds.map(pageId => {
+        return this.tryFetchPage(pageId);
+      }),
+    );
+
+    pageIds.forEach((pageId, index) => {
+      let pageData = pageDatas[index];
+
+      if (pageData.error) {
+        this.addErrorPage(pageId);
+      } else {
+        this.addPage(pageId, pageData.data);
+      }
+    });
+  }
+
+  async tryFetchPage(pageId: number) {
+    let target: {
+      data: string[] | undefined;
+      error: boolean;
+    } = {
+      error: false,
+      data: undefined,
+    };
+
+    try {
+      let data = await this.source.getPage(pageId);
+      target.data = data;
+    } catch (error) {
+      target.error = true;
+    }
+
+    return target;
+  }
+
+  getPageId(pageIndex: number): number {
+    return this.pageIndexToPageId.get(pageIndex) as number;
+  }
+
+  fetchPage(pageId: number) {
+    return this.source.getPage(pageId);
+  }
+
+  addLoadingPage(pageId: number) {
+    let renderPage = new ReaderPage(pageId);
+    this.pages.set(pageId, renderPage);
+  }
+
+  addErrorPage(pageId: number) {
+    let renderPage = new ReaderPage(pageId);
+    renderPage.loading = false;
+    renderPage.error = true;
+    this.pages.set(pageId, renderPage);
+  }
+
+  addPage(pageId: number, data: string[] | undefined) {
+    console.log('ddd', pageId, data);
+
+    let renderPage = new ReaderPage(pageId);
+    renderPage.setData(data);
     this.pages.set(pageId, renderPage);
   }
 
@@ -73,9 +146,22 @@ export class ReaderPageManager {
 
     let target: Page[] = [];
 
+    let pageIndex = 0;
+    let pageIndexToPageId: Map<number, number> = new Map();
+
     readerPages.forEach(readerPage => {
-      target = target.concat(readerPage.render(config));
+      let pageId = readerPage.id;
+      let pages = readerPage.render(config);
+
+      range(0, pages.length).forEach(_ => {
+        pageIndexToPageId.set(pageIndex, pageId);
+        pageIndex += 1;
+      });
+
+      target = target.concat(pages);
     });
+
+    this.pageIndexToPageId = pageIndexToPageId;
 
     return target;
   }
@@ -83,11 +169,26 @@ export class ReaderPageManager {
 
 export class ReaderPage {
   id: number;
-  data: string[];
+  data: string[] = [];
+  loading: boolean = false;
+  error: boolean = false;
+  empty: boolean = false;
 
-  constructor(id: number, data: string[]) {
-    this.data = data;
+  constructor(id: number) {
     this.id = id;
+    this.loading = true;
+    this.error = false;
+  }
+
+  setData(data: string[] | undefined) {
+    if (data) {
+      this.data = data;
+    } else {
+      this.empty = true;
+    }
+
+    this.loading = false;
+    this.error = false;
   }
 
   getPageData(slice: PageSlice): string[] {
@@ -95,6 +196,28 @@ export class ReaderPage {
   }
 
   render(config: ReaderRenderConfig): Page[] {
+    if (this.loading || this.error || this.empty) {
+      let key = `page_${this.id}}`;
+
+      if (this.loading) {
+        key = key + '_loading';
+      }
+
+      if (this.error) {
+        key = key + '_error';
+      }
+
+      return [
+        {
+          key,
+          data: [],
+          loading: this.loading,
+          error: this.error,
+          empty: this.empty,
+        },
+      ];
+    }
+
     let lineCount = Math.ceil(config.width / config.fontSize);
 
     let page = 0;
@@ -142,6 +265,9 @@ export class ReaderPage {
       target.push({
         key,
         data: this.getPageData(slice),
+        loading: false,
+        error: false,
+        empty: false,
       });
     });
 

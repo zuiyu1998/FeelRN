@@ -3,7 +3,7 @@ import {ReaderRenderConfig} from './types';
 import {StyleProp, TextStyle} from 'react-native';
 
 export type ReaderContextState = {
-  addPage(pageId: number, data: string[]): void;
+  fetchPage(pageId: number, data: string[]): void;
   config: ReaderRenderConfig;
 };
 

@@ -8,6 +8,30 @@ export function ReaderPageView(props: Page) {
 
   const textStyle = useReaderTextStyle();
 
+  if (props.loading) {
+    return (
+      <View>
+        <Text style={textStyle}>loading</Text>
+      </View>
+    );
+  }
+
+  if (props.error) {
+    return (
+      <View>
+        <Text style={textStyle}>error</Text>
+      </View>
+    );
+  }
+
+  if (props.empty) {
+    return (
+      <View>
+        <Text style={textStyle}>empty</Text>
+      </View>
+    );
+  }
+
   return (
     <View>
       {data.map((text, index) => {
