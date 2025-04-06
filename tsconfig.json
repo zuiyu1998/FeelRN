@@ -12,5 +12,5 @@
       "@tools/*": ["src/tools/*"],
       "@views/*": ["src/views/*"]
     }
-  }
+  },
 }
