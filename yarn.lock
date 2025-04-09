@@ -1951,19 +1951,19 @@
     use-latest-callback "^0.2.1"
     use-sync-external-store "^1.2.2"
 
-"@react-navigation/elements@^2.3.7":
-  version "2.3.7"
-  resolved "https://registry.npmmirror.com/@react-navigation/elements/-/elements-2.3.7.tgz#5b9d7aed04fef2993bb0f235a6811da6aab198f1"
-  integrity sha512-7IrtOu+2qck7Tc+7bNR1HI/8ZuaRe4XKQ0+WyWErq01hmK79cqGZ+/k4hy0EOQMBndUJ/kb3x+W/xP4G8sdTQg==
+"@react-navigation/elements@^2.3.8":
+  version "2.3.8"
+  resolved "https://registry.npmmirror.com/@react-navigation/elements/-/elements-2.3.8.tgz#ebf32b2f4540b5f6391a937e437ac7f4aed1f2d4"
+  integrity sha512-2ZVBtPfrkmOxzvIyDu3fPZ6aS4HcXL+TvzPDGa1znY2OP1Llo6wH14AmJHQFDquiInp2656hRMM1BkfJ3yPwew==
   dependencies:
     color "^4.2.3"
 
-"@react-navigation/native-stack@^7.3.9":
-  version "7.3.9"
-  resolved "https://registry.npmmirror.com/@react-navigation/native-stack/-/native-stack-7.3.9.tgz#ce8e78bbcdd753e44c3cc00d59a48294b7b4bf41"
-  integrity sha512-S1Ay8ZWAP0wlfb6OWpVaNXQ5Cn/p7dIJFPK6eiErHobQjvFXwnFbgEhBvJJLYKQNosUs1qgEZP6hp99pH/8Osg==
+"@react-navigation/native-stack@^7.3.10":
+  version "7.3.10"
+  resolved "https://registry.npmmirror.com/@react-navigation/native-stack/-/native-stack-7.3.10.tgz#80553b5ccaf27dcf1b67d3d93d7e73fdd985d29f"
+  integrity sha512-bO/3bZiL/i2dbJQEeqfxIqp1CKzyx+RPdwaiLm6za8cUl877emnxFeAAOSUbN7r/AJgq+U/iCwc3K88mh+4oRQ==
   dependencies:
-    "@react-navigation/elements" "^2.3.7"
+    "@react-navigation/elements" "^2.3.8"
     warn-once "^0.1.1"
 
 "@react-navigation/native@^7.0.14":

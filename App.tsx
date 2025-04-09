@@ -8,19 +8,13 @@
 import React from 'react';
 import {Router} from 'src/router';
 
-import {PaperProvider} from 'react-native-paper';
-import {useTheme} from '@theme/hooks';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {ApplicationProvider} from '@components/Application';
 
 function App(): React.JSX.Element {
-  const theme = useTheme();
-
   return (
-    <GestureHandlerRootView>
-      <PaperProvider theme={theme}>
-        <Router />
-      </PaperProvider>
-    </GestureHandlerRootView>
+    <ApplicationProvider>
+      <Router />
+    </ApplicationProvider>
   );
 }
 
