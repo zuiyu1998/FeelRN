@@ -1,32 +1,44 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStaticNavigation } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
+import SignInScreen from '../screens/SignInScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import { SignInContext, useIsSignedIn, useIsSignedOut } from './SignInContext';
 
 export type RootStackParamList = {
+  SignIn: undefined;
   Home: undefined;
   Details: { itemId: number; title?: string };
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const RootStack = createNativeStackNavigator({
+  screens: {},
+  groups: {
+    SignedIn: {
+      if: useIsSignedIn,
+      screens: {
+        Home: HomeScreen,
+        Details: DetailsScreen,
+      },
+    },
+    SignedOut: {
+      if: useIsSignedOut,
+      screens: {
+        SignIn: SignInScreen,
+      },
+    },
+  },
+});
+
+const Navigation = createStaticNavigation(RootStack);
 
 function Router() {
+  let isSignedIn = true;
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: '首页' }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={({ route }) => ({ title: route.params.title })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SignInContext.Provider value={{ isSignedIn }}>
+      <Navigation />
+    </SignInContext.Provider>
   );
 }
 
