@@ -17,4 +17,14 @@ interface UserActions {
 
 type UserStore = UserState & UserActions;
 
-export type { User, UserActions, UserState, UserStore };
+interface AppState {
+  loading: boolean;
+}
+
+interface AppActions {
+  finishLoading: () => void;
+}
+
+type AppStore = AppState & AppActions;
+
+export type { User, UserActions, UserState, UserStore, AppActions, AppState, AppStore };

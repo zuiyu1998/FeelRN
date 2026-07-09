@@ -4,16 +4,18 @@ import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import { useUserStore } from '../store/userStore';
+import { useAppStore } from '../store/appStore';
 import { SignInContext, useIsSignedIn, useIsSignedOut } from './SignInContext';
+import SplashScreen from '../screens/SplashScreen';
 
 export type RootStackParamList = {
+  Splash: undefined;
   SignIn: undefined;
   Home: undefined;
   Details: { itemId: number; title?: string };
 };
 
 const RootStack = createNativeStackNavigator({
-  screens: {},
   groups: {
     SignedIn: {
       if: useIsSignedIn,
@@ -34,8 +36,12 @@ const RootStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(RootStack);
 
 function Router() {
-  const token = useUserStore((state) => state.token);
-  const isSignedIn = token !== null;
+  const isSignedIn = useUserStore(state => state.token) !== null;
+  const loading = useAppStore(state => state.loading);
+
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   return (
     <SignInContext.Provider value={{ isSignedIn }}>
