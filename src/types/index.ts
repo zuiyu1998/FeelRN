@@ -27,4 +27,20 @@ interface AppActions {
 
 type AppStore = AppState & AppActions;
 
-export type { User, UserActions, UserState, UserStore, AppActions, AppState, AppStore };
+// ── HttpClient ──
+interface ApiResponse<T> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+interface HttpClientConfig {
+  baseURL?: string;
+  timeout?: number;
+}
+
+export type {
+  User, UserActions, UserState, UserStore,
+  AppActions, AppState, AppStore,
+  ApiResponse, HttpClientConfig,
+};
