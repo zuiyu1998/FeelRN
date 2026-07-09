@@ -1,2 +1,2 @@
 [permissions]
-allow = ["Bash(mkdir -p:*)", "Bash(yarn --version 2>&1)", "Edit", "Bash(rmdir \"C:\\Users\\zuiyu\\Documents\\dev\\js\\FeelRN\\src\\contexts\" 2>&1)", "Bash(cd \"C:\\Users\\zuiyu\\Documents\\dev\\js\\FeelRN\" && npx tsc --noEmit --pretty 2>&1 | head -30)"]
+allow = ["Bash(mkdir -p:*)", "Bash(yarn --version 2>&1)", "Edit", "Bash(rmdir \"C:\\Users\\zuiyu\\Documents\\dev\\js\\FeelRN\\src\\contexts\" 2>&1)", "Bash(cd \"C:\\Users\\zuiyu\\Documents\\dev\\js\\FeelRN\" && npx tsc --noEmit --pretty 2>&1 | head -30)", "Bash(cd \"C:\\Users\\zuiyu\\Documents\\dev\\js\\FeelRN\" && npx tsc --noEmit --pretty 2>&1)"]

@@ -3,6 +3,7 @@ import { createStaticNavigation } from '@react-navigation/native';
 import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import { useUserStore } from '../store/userStore';
 import { SignInContext, useIsSignedIn, useIsSignedOut } from './SignInContext';
 
 export type RootStackParamList = {
@@ -33,7 +34,8 @@ const RootStack = createNativeStackNavigator({
 const Navigation = createStaticNavigation(RootStack);
 
 function Router() {
-  let isSignedIn = true;
+  const token = useUserStore((state) => state.token);
+  const isSignedIn = token !== null;
 
   return (
     <SignInContext.Provider value={{ isSignedIn }}>

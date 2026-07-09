@@ -4,12 +4,12 @@ interface User {
 }
 
 interface UserState {
-  token: string;
+  token: string | null;
   user: User | null;
 }
 
 interface UserActions {
-  setToken: (token: string) => void;
+  setToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
   setAuth: (token: string, user: User) => void;
   signOut: () => void;

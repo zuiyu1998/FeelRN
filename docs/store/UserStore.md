@@ -6,7 +6,7 @@
 
 ```tsx
 Store 结构
-└── state: { token: string; user: User | null }
+└── state: { token: string | null; user: User | null }
 └── actions: { setToken, setUser, setAuth, signOut, ... }
 ```
 
@@ -19,12 +19,12 @@ interface User {
 }
 
 interface UserState {
-  token: string;
+  token: string | null;
   user: User | null;
 }
 
 interface UserActions {
-  setToken: (token: string) => void;
+  setToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
   setAuth: (token: string, user: User) => void;
   signOut: () => void;
@@ -33,7 +33,7 @@ interface UserActions {
 type UserStore = UserState & UserActions;
 ```
 
-> `User` 类型的具体字段由项目自行定义。本 store 只要求 `token: string` 和 `user: User | null` 两个状态字段。
+> `User` 类型的具体字段由项目自行定义。本 store 只要求 `token: string | null` 和 `user: User | null` 两个状态字段。
 
 ## 导出的 API
 
@@ -54,13 +54,13 @@ import { create } from 'zustand';
 import type { User, UserStore } from '../types';
 
 const useUserStore = create<UserStore>((set) => ({
-  token: '',
+  token: null,
   user: null,
 
-  setToken: (token: string) => set({ token }),
+  setToken: (token: string | null) => set({ token }),
   setUser: (user: User | null) => set({ user }),
   setAuth: (token: string, user: User) => set({ token, user }),
-  signOut: () => set({ token: '', user: null }),
+  signOut: () => set({ token: null, user: null }),
 }));
 
 export { useUserStore };
