@@ -44,3 +44,10 @@ export type {
   AppActions, AppState, AppStore,
   ApiResponse, HttpClientConfig,
 };
+
+// ── Article ──
+export type {
+  Article, ArticleAuthor, ArticleMeta,
+  ArticleContent, ArticleMedia, ArticleTag,
+  ArticleStats, ArticleInteraction, ArticleRebuttal,
+} from './article';
